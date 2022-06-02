@@ -8,7 +8,7 @@ https://i3wm.org/
 or i3-gaps
 
 
-i3-gaps https://github.com/Airblader/i3
+https://github.com/Airblader/i3
 
 ## LunarVim
 https://github.com/LunarVim/LunarVim
