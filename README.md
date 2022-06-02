@@ -1,4 +1,16 @@
-# dotfiles-42069
+# Howdy
+
+## How to use
+
+### Help
+Consult the cli for wisdom, using ```python dot_at_me.py -h```
+
+### Just give me all the files
+```python dot_at_me.py consume```
+
+---
+
+# Services
 
 ## Picom
 https://github.com/yshui/picom
@@ -17,4 +29,5 @@ https://github.com/LunarVim/LunarVim
 https://github.com/alacritty/alacritty
 
 ---
+
 DO NOT FORGET TO BACKUP YOUR FILES!!!
