@@ -5,8 +5,8 @@ https://github.com/yshui/picom
 
 ## I3
 https://i3wm.org/
-or i3-gaps
 
+or i3-gaps
 
 https://github.com/Airblader/i3
 
