@@ -235,6 +235,7 @@ assign [class="Slack"] 3
 assign [class="Steam"] 4
 assign [class="Lutris"] 5
 assign [class="heroic"] 5
+assign [class="qBitorrent"] 6
 assign [class="Subl"] 8
 assign [class="Spotify"] 9
 assign [class="discord"] 10
@@ -244,6 +245,7 @@ for_window [class="Slack"] move to workspace 3
 for_window [class="Steam"] move to workspace 4
 for_window [class="Lutris"] move to workspace 5
 for_window [class="heroic"] move to workspace 5
+for_window [class="qBittorent"] move to workspace 6
 for_window [class="Subl"] move to workspace 8
 for_window [class="Spotify"] move to workspace 9
 for_window [class="discord"] move to workspace 10
@@ -278,6 +280,9 @@ hide_edge_borders smart
 smart_gaps on
 
 # Screenshot
-bindsym --release $mod+Shift+s exec import ~/Pictures/screenshot.png
 
+# take a screenshot of a screen region and copy it to a clipboard
+bindsym --release Insert exec "scregcp -s ~/Pictures/screenshots/"
 
+# take a screenshot of a whole window and copy it to a clipboard
+bindsym --release Shift+Insert exec "scregcp ~/Pictures/screenshots/"
