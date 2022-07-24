@@ -18,6 +18,9 @@ service_map: dict[str, FilesPaths] = {
     "alacritty": {
         "folder_path": "alacritty",
     },
+    "btop": {
+        "folder_path": "btop",
+    },
 }
 
 all_services: list[str] = [service_name for service_name in service_map.keys()]

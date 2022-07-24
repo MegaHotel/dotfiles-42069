@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .config/lvim/plugin/
 *.bak
+btop.log
+
