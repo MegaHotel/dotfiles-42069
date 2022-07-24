@@ -206,18 +206,16 @@ bindsym $mod+r mode "resize"
         playerctl.format="{{artist}} - {{title}}" \
         -t iceberg-powerline
      position top
-
-    # for theme gruvbox-powerline-light
-    #colors {
-      #background #665c54
-      #inactive_workspace #7c6f64 #3c3836 #f1f1f1
-      #focused_workspace #7c6f64 #fabd2f #282828
-    #}
  }
 # ------------------------------------------
 # CUSTOM KEYS START
 # ------------------------------------------
-# exec_always --no-startup-id picom -CGb
+
+
+
+
+
+# Startup
 exec_always --no-startup-id picom
 exec_always --no-startup-id i3-auto-layout
 exec --no-startup-id feh --bg-scale $HOME/Pictures/wallpaper.jpg
@@ -228,39 +226,71 @@ exec --no-startup-id steam
 exec --no-startup-id lutris
 exec --no-startup-id heroic
 exec --no-startup-id discord
+exec_always --no-startup-id fix-mouse
+exec --no-startup-id fix-mouse
+exec --no-startup-id alacritty --class btop,btop -e btop
 
+# Assign program to window
 assign [class="Alacritty"] 1
 assign [class="Google-chrome"] 2
 assign [class="Slack"] 3
+assign [class="steam_app_881100"] 3
+assign [class="steam_app_1182480"] 3
+assign [class="steam_app_1238810"] 3
+assign [class="gw2-64.exe"] 3
+assign [class="wineboot.exe"] 3
+assign [class="explorer.exe"] 3
+assign [class="Albion-Online"] 3
+assign [class="Albion Online Launcher"] 3
+assign [class="TotalWarhammer3"] 3
+assign [class="RimWorldLinux"] 3
+assign [class="steam_app_0"] 3
 assign [class="Steam"] 4
 assign [class="Lutris"] 5
 assign [class="heroic"] 5
 assign [class="qBitorrent"] 6
 assign [class="Subl"] 8
-assign [class="Spotify"] 9
 assign [class="discord"] 10
 for_window [class="Alacritty"] move to workspace 1
 for_window [class="Google-chrome"] move to workspace 2
 for_window [class="Slack"] move to workspace 3
+for_window [class="steam_app_881100"] workspace 3
+for_window [class="steam_app_1182480"] workspace 3
+for_window [class="steam_app_1238810"] workspace 3
+for_window [class="gw2-64.exe"] workspace 3
+for_window [class="wineboot.exe"] workspace 3
+for_window [class="explorer.exe"] workspace 3
+for_window [class="Albion-Online"] workspace 3
+for_window [class="Albion Online Launcher"] workspace 3
+for_window [class="TotalWarhammer3"] workspace 3
+for_window [class="RimWorldLinux"] workspace 3
+for_window [class="steam_app_0"] workspace 3
 for_window [class="Steam"] move to workspace 4
 for_window [class="Lutris"] move to workspace 5
 for_window [class="heroic"] move to workspace 5
 for_window [class="qBittorent"] move to workspace 6
 for_window [class="Subl"] move to workspace 8
-for_window [class="Spotify"] move to workspace 9
 for_window [class="discord"] move to workspace 10
 for_window [instance="origin.exe"] floating enable
+for_window [instance="steam_proton"] floating enable
+for_window [instance="steam_app_1182480"] floating enable
+for_window [instance="steam_app_1238810"] floating enable
+for_window [class="btop"] floating_enable
+for_window [class="btop"] move scratchpad; for_window [class="btop"] scratchpad show; move scratchpad
+for_window [class="Spotify"] floating_enable
+for_window [class="Spotify"] move scratchpad; for_window [class="Spotify"] scratchpad show; move scratchpad
 
 
-# bindsym $mod+Shift+s exec --no-startup-id ~/dotfiles/bin/monitor
-# bindsym $mod+Shift+n exec --no-startup-id ~/dotfiles/bin/resolution
+# Scratchpad keybinds
+bindsym $mod+t [class="btop"] scratchpad show; move position center
+bindsym $mod+m [class="Spotify"] scratchpad show; move position center
 
 # FKeys
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
-#
+
 # # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
@@ -286,3 +316,4 @@ bindsym --release Insert exec "scregcp -s ~/Pictures/screenshots/"
 
 # take a screenshot of a whole window and copy it to a clipboard
 bindsym --release Shift+Insert exec "scregcp ~/Pictures/screenshots/"
+mouse_warping none

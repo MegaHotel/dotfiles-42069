@@ -28,6 +28,12 @@ https://github.com/LunarVim/LunarVim
 ## Alacritty
 https://github.com/alacritty/alacritty
 
+## Btop
+https://github.com/aristocratos/btop
+
+## Fonts
+Hack + Fira Code
+
 ---
 
 DO NOT FORGET TO BACKUP YOUR FILES!!!
