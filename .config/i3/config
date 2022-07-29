@@ -221,7 +221,7 @@ exec_always --no-startup-id i3-auto-layout
 exec --no-startup-id feh --bg-scale $HOME/Pictures/wallpaper.jpg
 exec --no-startup-id alacritty
 exec --no-startup-id google-chrome-stable
-exec --no-startup-id spotify
+exec --no-startup-id /opt/google/chrome/google-chrome --profile-directory=Default --app-id=pjibgclleladliembfgfagdaldikeohf --class 'Spotify'
 exec --no-startup-id steam
 exec --no-startup-id lutris
 exec --no-startup-id heroic
@@ -229,11 +229,12 @@ exec --no-startup-id discord
 exec_always --no-startup-id fix-mouse
 exec --no-startup-id fix-mouse
 exec --no-startup-id alacritty --class btop,btop -e btop
+exec --no-startup-id slack
 
 # Assign program to window
 assign [class="Alacritty"] 1
 assign [class="Google-chrome"] 2
-assign [class="Slack"] 3
+assign [class="Slack"] 6
 assign [class="steam_app_881100"] 3
 assign [class="steam_app_1182480"] 3
 assign [class="steam_app_1238810"] 3
@@ -253,7 +254,7 @@ assign [class="Subl"] 8
 assign [class="discord"] 10
 for_window [class="Alacritty"] move to workspace 1
 for_window [class="Google-chrome"] move to workspace 2
-for_window [class="Slack"] move to workspace 3
+for_window [class="Slack"] move to workspace 6
 for_window [class="steam_app_881100"] workspace 3
 for_window [class="steam_app_1182480"] workspace 3
 for_window [class="steam_app_1238810"] workspace 3
@@ -277,13 +278,13 @@ for_window [instance="steam_app_1182480"] floating enable
 for_window [instance="steam_app_1238810"] floating enable
 for_window [class="btop"] floating_enable
 for_window [class="btop"] move scratchpad; for_window [class="btop"] scratchpad show; move scratchpad
-for_window [class="Spotify"] floating_enable
-for_window [class="Spotify"] move scratchpad; for_window [class="Spotify"] scratchpad show; move scratchpad
+for_window [title="Spotify"] floating_enable
+for_window [title="Spotify"] move scratchpad; for_window [title="Spotify"] scratchpad show; move scratchpad
 
 
 # Scratchpad keybinds
 bindsym $mod+t [class="btop"] scratchpad show; move position center
-bindsym $mod+m [class="Spotify"] scratchpad show; move position center
+bindsym $mod+m [title="Spotify"] scratchpad show; move position center
 
 # FKeys
 # Pulse Audio controls
