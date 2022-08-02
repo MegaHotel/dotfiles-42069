@@ -184,6 +184,14 @@ lvim.builtin.which_key.mappings["r"] = {
   c = { "<cmd>:lua require'rust-tools.open_cargo_toml'.open_cargo_toml()<CR>", "Open Cargo Toml" },
   g = { "<cmd>:lua require'rust-tools.crate_graph'.view_crate_graph(backend, output)<CR>", "View crate graph" }
 }
+lvim.builtin.which_key.mappings["m"] = {
+  name = "Miscellaneous",
+  t = {
+    name = "TODO list",
+    d = { ":TodoTelescope<CR>", "Telescope List" },
+  },
+  p = { ":Glow<CR>", "Preview Markdown" },
+}
 
 
 -- TODO: User Config for predefined plugins
@@ -333,6 +341,75 @@ lvim.plugins = {
     end,
     ft = { "rust", "rs" },
   },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    event = "BufRead",
+    setup = function()
+      vim.g.indent_blankline_char = "▏"
+      vim.opt.list = true
+    end,
+    config = function()
+      require("indent_blankline").setup {
+        enabled = true,
+        bufname_exclude = { "README.md" },
+        buftype_exclude = { "terminal", "nofile" },
+        filetype_exclude = {
+          "alpha",
+          "log",
+          "gitcommit",
+          "dapui_scopes",
+          "dapui_stacks",
+          "dapui_watches",
+          "dapui_breakpoints",
+          "dapui_hover",
+          "LuaTree",
+          "dbui",
+          "UltestSummary",
+          "UltestOutput",
+          "vimwiki",
+          "markdown",
+          "json",
+          "txt",
+          "vista",
+          "NvimTree",
+          "git",
+          "TelescopePrompt",
+          "undotree",
+          "flutterToolsOutline",
+          "org",
+          "orgagenda",
+          "help",
+          "startify",
+          "dashboard",
+          "packer",
+          "neogitstatus",
+          "NvimTree",
+          "Outline",
+          "Trouble",
+          "lspinfo",
+          "", -- for all buffers without a file type
+        },
+        space_char_blankline = " ",
+        use_treesitter = true,
+        show_foldtext = false,
+        show_current_context = true,
+        show_current_context_start = true,
+      }
+    end,
+  },
+  {
+    'ethanholz/nvim-lastplace',
+  },
+  {
+    "folke/todo-comments.nvim",
+    event = "BufRead",
+    config = function()
+      require("todo-comments").setup()
+    end,
+  },
+  {
+    "ellisonleao/glow.nvim"
+  },
 } -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = { "*.json", "*.jsonc" },
@@ -347,9 +424,16 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+
+require('nvim-lastplace').setup {
+  lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
+  lastplace_ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
+  lastplace_open_folds = true
+}
+
+
 -- Guifont
 vim.o.guifont = "Fira Code:h11"
-
 
 -- Neovide config
 vim.cmd([[
@@ -473,3 +557,8 @@ if exists("g:neovide")
 
 endif
 ]])
+
+
+-- Enable netrw for remote vim
+lvim.builtin.nvimtree.setup.disable_netrw = false
+lvim.builtin.nvimtree.setup.hijack_netrw = false
