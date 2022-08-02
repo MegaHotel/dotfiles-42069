@@ -31,6 +31,22 @@ https://github.com/alacritty/alacritty
 ## Btop
 https://github.com/aristocratos/btop
 
+## Fish
+https://fishshell.com/
+
+## Oh My Fish
+https://github.com/oh-my-fish/oh-my-fish
+
+## Starship
+https://starship.rs/guide/
+
+## Asciiquarium
+Use Pamac or https://github.com/cmatsuoka/asciiquarium
+
+## Speedtest
+https://github.com/sivel/speedtest-cli
+It's a python script so don't forget to `chmod +x` it.
+
 ## Fonts
 Hack + Fira Code
 
