@@ -69,6 +69,39 @@ local dap = require('dap')
 local dapui = require("dapui")
 dapui.setup()
 
+dap.adapters.node2 = function(cb, config)
+  if config.preLaunchTask then
+    vim.fn.system(config.preLaunchTask)
+  end
+  local adapter = {
+    type = "executable",
+    command = "node",
+    args = { os.getenv('HOME') .. '/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js' },
+  }
+  cb(adapter)
+end
+
+local node = {
+  name = 'Launch',
+  type = 'node2',
+  request = 'launch',
+  program = '${file}',
+  cwd = vim.fn.getcwd(),
+  sourceMaps = true,
+  protocol = 'inspector',
+  console = 'integratedTerminal',
+}
+
+local node_attach = {
+  -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+  name = 'Attach to process',
+  type = 'node2',
+  request = 'attach',
+  processId = require 'dap.utils'.pick_process,
+}
+
+dap.configurations.typescript = { node, node_attach }
+dap.configurations.javascript = { node, node_attach }
 -- dap.adapters.lldb = {
 --   type = 'executable',
 --   command = '/usr/bin/lldb-vscode',
@@ -117,21 +150,22 @@ dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
 
--- Visual block multiline comment
-vim.api.nvim_set_keymap("v", "<C-/>", "<ESC>:lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>", { noremap = true, silent = true })
 
-local function map(mode, lhs, rhs, opts)
+function MapKey(mode, lhs, rhs, opts)
   local options = { noremap = true }
   if opts then options = vim.tbl_extend('force', options, opts) end
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
 -- Won't work with neovide
-map("n", "<C-S-l>", ":BufferLineMoveNext<cr>", { silent = true })
-map("n", "<C-S-h>", ":BufferLineMovePrev<cr>", { silent = true })
+MapKey("n", "<C-S-l>", ":BufferLineMoveNext<cr>", { silent = true })
+MapKey("n", "<C-S-h>", ":BufferLineMovePrev<cr>", { silent = true })
+
+-- Visual block multiline comment
+-- vim.api.nvim_set_keymap("v", "<C-/>", "<ESC>:lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>", { noremap = true, silent = true })
+MapKey("v", "<C-/>", "<ESC>:lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>", { silent = true })
 
 -- Nvimtree config
-
 lvim.builtin.nvimtree.setup.view.mappings.list = {
   { key = { "l", "<CR>", "o" }, action = "edit", mode = "n" },
   { key = "h", action = "close_node" },
@@ -303,10 +337,10 @@ lvim.plugins = {
     config = function()
       local lsp_installer_servers = require "nvim-lsp-installer.servers"
       local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
-      require("rust-tools").setup({
+      local rt = require("rust-tools")
+      rt.setup({
         tools = {
           autoSetHints = true,
-          hover_with_actions = true,
           hover_actions = {
             auto_focus = true,
           },
@@ -316,8 +350,28 @@ lvim.plugins = {
         },
         server = {
           cmd_env = requested_server._default_options.cmd_env,
-          on_attach = require("lvim.lsp").common_on_attach,
           on_init = require("lvim.lsp").common_on_init,
+          on_attach = function(_, _)
+            MapKey("n", "gd", "<CMD>lua vim.lsp.buf.definition()<CR>", { silent = true, desc = "Goto definition" })
+            MapKey("n", "gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", { silent = true, desc = "Goto declaration" })
+            MapKey("n", "gr", "<CMD>lua vim.lsp.buf.references()<CR>", { silent = true, desc = "Goto references" })
+            MapKey("n", "gI", "<CMD>lua vim.lsp.buf.implementation()<CR>", { silent = true, desc = "Goto implementation" })
+            MapKey("n", "gs", "<CMD>lua vim.lsp.buf.signature_help()<CR>", { silent = true, desc = "Show signature help" })
+            vim.keymap.set("n", "gp",
+              function()
+                require("lvim.lsp.peek").Peek "definition"
+              end,
+              { silent = true, desc = "Peek Definition" })
+            vim.keymap.set("n", "gl",
+              function()
+                local config = lvim.lsp.diagnostics.float
+                config.scope = "line"
+                vim.diagnostic.open_float(0, config)
+              end,
+              { silent = true, desc = "Show line diagnostics" })
+            MapKey("n", "K", "<CMD>RustHoverActions<CR>", { silent = true, desc = "Show hover" })
+            MapKey("n", "U", "<CMD>RustCodeAction<CR>", { silent = true, desc = "Code action" })
+          end,
           dap = {
             adapter = require('rust-tools.dap').get_codelldb_adapter(
               codelldb_path, liblldb_path)
@@ -410,7 +464,62 @@ lvim.plugins = {
   {
     "ellisonleao/glow.nvim"
   },
-} -- Autocommands (https://neovim.io/doc/user/autocmd.html)
+  {
+    "kevinhwang91/nvim-bqf",
+    event = { "BufRead", "BufNew" },
+    config = function()
+      require("bqf").setup({
+        auto_enable = true,
+        preview = {
+          win_height = 12,
+          win_vheight = 12,
+          delay_syntax = 80,
+          border_chars = { "┃", "┃", "━", "━", "┏", "┓", "┗", "┛", "█" },
+        },
+        func_map = {
+          vsplit = "",
+          ptogglemode = "z,",
+          stoggleup = "",
+        },
+        filter = {
+          fzf = {
+            action_for = { ["ctrl-s"] = "split" },
+            extra_opts = { "--bind", "ctrl-o:toggle-all", "--prompt", "> " },
+          },
+        },
+      })
+    end,
+  },
+  {
+    "romgrk/nvim-treesitter-context",
+    config = function()
+      require("treesitter-context").setup {
+        enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+        throttle = true, -- Throttles plugin updates (may improve performance)
+        max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+        patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+          -- For all filetypes
+          -- Note that setting an entry here replaces all other patterns for this entry.
+          -- By setting the 'default' entry below, you can control which nodes you want to
+          -- appear in the context window.
+          default = {
+            'class',
+            'function',
+            'method',
+          },
+        },
+      }
+    end
+  },
+  {
+    "p00f/nvim-ts-rainbow",
+  },
+}
+
+-- Enable treesitter-rainbow
+lvim.builtin.treesitter.rainbow.enable = true
+
+-- Autocommands (https://neovim.io/doc/user/autocmd.html)
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = { "*.json", "*.jsonc" },
   -- enable wrap mode for json files only

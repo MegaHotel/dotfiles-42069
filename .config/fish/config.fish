@@ -3,6 +3,8 @@ if status is-interactive
 end
 set -gx PATH "$HOME/.cargo/bin" $PATH;
 set -gx STARSHIP_CONFIG  "$HOME/.config/starship/starship.toml"
+set -Ux PYENV_ROOT $HOME/.pyenv
+set -U fish_user_paths $PYENV_ROOT/bin $fish_user_paths
 
 
 alias ll='exa --long -a --icons'
@@ -25,3 +27,6 @@ alias new_btop="alacritty --class btop,btop -e btop </dev/null &>/dev/null & dis
 
 starship init fish | source
 neofetch --ascii ~/.config/neofetch/ascii.txt
+pyenv init - | source
+status --is-interactive; and pyenv virtualenv-init - | source
+

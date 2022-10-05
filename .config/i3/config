@@ -218,23 +218,23 @@ bindsym $mod+r mode "resize"
 # Startup
 exec_always --no-startup-id picom
 exec_always --no-startup-id i3-auto-layout
-exec --no-startup-id feh --bg-scale $HOME/Pictures/wallpaper.jpg
+exec_always --no-startup-id dunst
+exec --no-startup-id $HOME/.config/i3/auto_wallpaper.sh
 exec --no-startup-id alacritty
 exec --no-startup-id google-chrome-stable
-exec --no-startup-id /opt/google/chrome/google-chrome --profile-directory=Default --app-id=pjibgclleladliembfgfagdaldikeohf --class 'Spotify'
+exec --no-startup-id spotify
 exec --no-startup-id steam
 exec --no-startup-id lutris
 exec --no-startup-id heroic
-exec --no-startup-id discord
+exec --no-startup-id flatpak run com.discordapp.Discord
 exec_always --no-startup-id fix-mouse
 exec --no-startup-id fix-mouse
 exec --no-startup-id alacritty --class btop,btop -e btop
-exec --no-startup-id slack
+exec --no-startup-id solaar
 
 # Assign program to window
 assign [class="Alacritty"] 1
 assign [title=".*Google Chrome"] 2
-assign [class="Slack"] 6
 assign [class=".*steam_app.*"] 3
 assign [class="gw2-64.exe"] 3
 assign [class="wineboot.exe"] 3
@@ -243,15 +243,17 @@ assign [class="Albion-Online"] 3
 assign [class="Albion Online Launcher"] 3
 assign [class="TotalWarhammer3"] 3
 assign [class="RimWorldLinux"] 3
+assign [class="battle.net.exe"] 3
 assign [class="Steam"] 4
 assign [class="Lutris"] 5
 assign [class="heroic"] 5
 assign [class="qBitorrent"] 6
+assign [class="Brave-browser"] 6
+assign [class="Solaar"] 7
 assign [class="Subl"] 8
 assign [class="discord"] 10
 for_window [class="Alacritty"] move to workspace 1
 for_window [title=".*Google Chrome"] move to workspace 2
-for_window [class="Slack"] move to workspace 6
 for_window [class=".*steam_app.*"] workspace 3
 for_window [class="gw2-64.exe"] workspace 3
 for_window [class="wineboot.exe"] workspace 3
@@ -260,10 +262,13 @@ for_window [class="Albion-Online"] workspace 3
 for_window [class="Albion Online Launcher"] workspace 3
 for_window [class="TotalWarhammer3"] workspace 3
 for_window [class="RimWorldLinux"] workspace 3
+for_window [class="battle.net.exe"] workspace 3
 for_window [class="Steam"] move to workspace 4
 for_window [class="Lutris"] move to workspace 5
 for_window [class="heroic"] move to workspace 5
 for_window [class="qBittorent"] move to workspace 6
+for_window [class="Brave-browser"] move to workspace 6
+for_window [class="Solaar"] move to workspace 7
 for_window [class="Subl"] move to workspace 8
 for_window [class="discord"] move to workspace 10
 for_window [instance="origin.exe"] floating enable
@@ -273,8 +278,8 @@ for_window [instance="steam_app_1238810"] floating enable
 for_window [instance="Nxplayer.bin"] floating enable
 for_window [class="btop"] floating_enable
 for_window [class="btop"] move scratchpad; for_window [class="btop"] scratchpad show; move scratchpad
-for_window [title="Spotify"] floating_enable
-for_window [title="Spotify"] move scratchpad; for_window [title="Spotify"] scratchpad show; move scratchpad
+for_window [class="Spotify"] floating_enable
+for_window [class="Spotify"] move scratchpad; for_window [class="Spotify"] scratchpad show; move scratchpad
 
 
 # Scratchpad keybinds

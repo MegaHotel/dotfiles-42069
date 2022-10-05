@@ -1,5 +1,5 @@
 function cd 
   builtin cd $argv && \
-  exa --long -a;
+  exa --long -a --icons;
 end
 

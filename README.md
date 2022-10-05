@@ -47,6 +47,22 @@ Use Pamac or https://github.com/cmatsuoka/asciiquarium
 https://github.com/sivel/speedtest-cli
 It's a python script so don't forget to `chmod +x` it.
 
+## Pyenv + Virtualenv + Pyright
+Use Pamac or https://github.com/pyenv/pyenv#installation
+Make sure to add the init stuff to shell config and only then install the virtualenv plugin.
+
+Then install virtualenv plugin
+https://github.com/pyenv/pyenv-virtualenv
+
+Then intsall Pyright plugin (Python Neovim LSP server)
+https://github.com/alefpereira/pyenv-pyright
+
+## Shellcheck
+https://github.com/koalaman/shellcheck#installing
+
+## Dunst (notifications)
+https://github.com/dunst-project/dunst
+
 ## Fonts
 Hack + Fira Code
 
