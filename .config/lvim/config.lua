@@ -44,7 +44,7 @@ lvim.keys.normal_mode = {
   ["<C-j>"] = ":BufferLineMovePrev<cr>",
 
   -- Comment line
-  ["<C-/>"] = ":lua require('Comment.api').toggle_current_linewise()<cr>",
+  ["<C-/>"] = ":lua require('Comment.api').toggle.linewise.current()<cr>",
 
   -- File explorer
   ["<C-e>"] = ":NvimTreeFocus<cr>",
@@ -61,10 +61,6 @@ lvim.builtin.which_key.mappings["/"] = {}
 
 -- dap
 lvim.builtin.dap.active = true
-
--- rust debug
--- local dap_install = require "dap-install"
--- dap_install.config("codelldb", {})
 local dap = require('dap')
 local dapui = require("dapui")
 dapui.setup()
@@ -102,43 +98,7 @@ local node_attach = {
 
 dap.configurations.typescript = { node, node_attach }
 dap.configurations.javascript = { node, node_attach }
--- dap.adapters.lldb = {
---   type = 'executable',
---   command = '/usr/bin/lldb-vscode',
---   name = 'lldb'
--- }
 
--- dap.configurations.rust = {
---   {
---     name = 'Launch',
---     type = 'lldb',
---     request = 'launch',
---     -- program = '${relativeFileDirname}',
---     program = function()
---       os.execute('make test > test.txt')
---       os.execute('make debug > test.txt')
---       os.execute('sleep 2')
---       -- local file = assert(io.popen('echo $(cargo build)'))
---       local file = assert(io.popen('pwd && echo $(cargo build)'))
---       local output = file:read('*all')
---       file:close()
---       print(123123)
---       print(output)
---       print(321312)
---       local handle = io.popen('echo "${PWD##*/}"')
---       local result = handle:read("*a")
---       handle:close()
---       return vim.fn.getcwd() .. '/target/debug/' .. result:sub(1, -2)
---     end,
---     cwd = '${workspaceFolder}',
---     -- stopOnEntry = false,
---     stopOnEntry = true,
---     args = {},
---     options = {
---       initialize_timeout_sec = 100;
---     }
---   },
--- }
 -- open dapui automatically when runnign debug
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
@@ -162,8 +122,7 @@ MapKey("n", "<C-S-l>", ":BufferLineMoveNext<cr>", { silent = true })
 MapKey("n", "<C-S-h>", ":BufferLineMovePrev<cr>", { silent = true })
 
 -- Visual block multiline comment
--- vim.api.nvim_set_keymap("v", "<C-/>", "<ESC>:lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>", { noremap = true, silent = true })
-MapKey("v", "<C-/>", "<ESC>:lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<cr>", { silent = true })
+MapKey("v", "<C-/>", "<ESC>:lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<cr>", { silent = true })
 
 -- Nvimtree config
 lvim.builtin.nvimtree.setup.view.mappings.list = {
@@ -235,7 +194,7 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 0
+-- lvim.builtin.nvimtree.show_icons.git = 0
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
@@ -333,30 +292,48 @@ lvim.plugins = {
   { "rcarriga/nvim-dap-ui" },
   {
     "simrat39/rust-tools.nvim",
-    branch = "modularize_and_inlay_rewrite",
+    -- ft = { "rust", "rs" }, -- IMPORTANT: re-enabling this seems to break inlay-hints
     config = function()
-      local lsp_installer_servers = require "nvim-lsp-installer.servers"
-      local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
-      local rt = require("rust-tools")
-      rt.setup({
+      require("rust-tools").setup {
         tools = {
-          autoSetHints = true,
-          hover_actions = {
-            auto_focus = true,
+          executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
+          reload_workspace_from_cargo_toml = true,
+          inlay_hints = {
+            auto = true,
+            only_current_line = false,
+            show_parameter_hints = true,
+            parameter_hints_prefix = "<-",
+            other_hints_prefix = "=>",
+            max_len_align = false,
+            max_len_align_padding = 1,
+            right_align = false,
+            right_align_padding = 7,
+            highlight = "Comment",
           },
-          runnables = {
-            use_telescope = true,
+          hover_actions = {
+            border = {
+              { "╭", "FloatBorder" },
+              { "─", "FloatBorder" },
+              { "╮", "FloatBorder" },
+              { "│", "FloatBorder" },
+              { "╯", "FloatBorder" },
+              { "─", "FloatBorder" },
+              { "╰", "FloatBorder" },
+              { "│", "FloatBorder" },
+            },
+            auto_focus = true,
           },
         },
         server = {
-          cmd_env = requested_server._default_options.cmd_env,
           on_init = require("lvim.lsp").common_on_init,
           on_attach = function(_, _)
             MapKey("n", "gd", "<CMD>lua vim.lsp.buf.definition()<CR>", { silent = true, desc = "Goto definition" })
             MapKey("n", "gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", { silent = true, desc = "Goto declaration" })
             MapKey("n", "gr", "<CMD>lua vim.lsp.buf.references()<CR>", { silent = true, desc = "Goto references" })
-            MapKey("n", "gI", "<CMD>lua vim.lsp.buf.implementation()<CR>", { silent = true, desc = "Goto implementation" })
-            MapKey("n", "gs", "<CMD>lua vim.lsp.buf.signature_help()<CR>", { silent = true, desc = "Show signature help" })
+            MapKey("n", "gI", "<CMD>lua vim.lsp.buf.implementation()<CR>",
+              { silent = true, desc = "Goto implementation" })
+            MapKey("n", "gs", "<CMD>lua vim.lsp.buf.signature_help()<CR>",
+              { silent = true, desc = "Show signature help" })
             vim.keymap.set("n", "gp",
               function()
                 require("lvim.lsp.peek").Peek "definition"
@@ -391,9 +368,8 @@ lvim.plugins = {
             }
           }
         },
-      })
+      }
     end,
-    ft = { "rust", "rs" },
   },
   {
     "lukas-reineke/indent-blankline.nvim",
