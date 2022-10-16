@@ -230,6 +230,7 @@ exec --no-startup-id flatpak run com.discordapp.Discord
 exec_always --no-startup-id fix-mouse
 exec --no-startup-id fix-mouse
 exec --no-startup-id alacritty --class btop,btop -e btop
+exec --no-startup-id $HOME/.config/i3/calendar.sh
 exec --no-startup-id solaar
 
 # Assign program to window
@@ -280,11 +281,14 @@ for_window [class="btop"] floating_enable
 for_window [class="btop"] move scratchpad; for_window [class="btop"] scratchpad show; move scratchpad
 for_window [class="Spotify"] floating_enable
 for_window [class="Spotify"] move scratchpad; for_window [class="Spotify"] scratchpad show; move scratchpad
+for_window [class="gcalcli"] floating enable 
+for_window [class="gcalcli"] resize set 70 ppt 69 ppt, move position 0 0, move scratchpad
 
 
 # Scratchpad keybinds
 bindsym $mod+t [class="btop"] scratchpad show; move position center
-bindsym $mod+m [title="Spotify"] scratchpad show; move position center
+bindsym $mod+m [class="Spotify"] scratchpad show; move position center
+bindsym $mod+c [class="gcalcli"] scratchpad show; move position center
 
 # FKeys
 # Pulse Audio controls
@@ -309,6 +313,8 @@ gaps outer 8
 for_window [class="^.*"] border pixel 3
 hide_edge_borders smart
 smart_gaps on
+
+for_window [class="gcalcli"] border pixel 0;
 
 # Screenshot
 
