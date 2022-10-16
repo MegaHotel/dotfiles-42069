@@ -194,7 +194,6 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
--- lvim.builtin.nvimtree.show_icons.git = 0
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
@@ -292,18 +291,18 @@ lvim.plugins = {
   { "rcarriga/nvim-dap-ui" },
   {
     "simrat39/rust-tools.nvim",
-    -- ft = { "rust", "rs" }, -- IMPORTANT: re-enabling this seems to break inlay-hints
+    ft = { "rust", "rs" }, -- IMPORTANT: re-enabling this seems to break inlay-hints
     config = function()
       require("rust-tools").setup {
         tools = {
-          executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
+          executor = require("rust-tools/executors").termopen,
           reload_workspace_from_cargo_toml = true,
           inlay_hints = {
             auto = true,
             only_current_line = false,
             show_parameter_hints = true,
-            parameter_hints_prefix = "<-",
-            other_hints_prefix = "=>",
+            parameter_hints_prefix = "<- ",
+            other_hints_prefix = "=> ",
             max_len_align = false,
             max_len_align_padding = 1,
             right_align = false,
