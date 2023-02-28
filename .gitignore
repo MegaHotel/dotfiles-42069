@@ -3,4 +3,5 @@ __pycache__/
 .config/lvim/plugin/
 *.bak
 btop.log
+*.cbor
 

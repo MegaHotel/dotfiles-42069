@@ -30,6 +30,9 @@ service_map: dict[str, FilesPaths] = {
     "ranger": {
         "folder_path": "ranger",
     },
+    "ncspot": {
+        "folder_path": "ncspot",
+    },
 }
 
 all_services: list[str] = [service_name for service_name in service_map.keys()]
