@@ -6,5 +6,7 @@ hide_display_names = true
 "Esc" = "back"
 "Ctrl+u" =  "move up 5"
 "Ctrl+d" =  "move down 5"
+"{" =  "move up 5"
+"}" =  "move down 5"
 "$" = "move up 100"
 "^" = "move down 100"
