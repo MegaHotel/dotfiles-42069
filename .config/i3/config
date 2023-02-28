@@ -196,14 +196,18 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
  bar {
-     font pango:DejaVu Sans Mono, FontAwesome 9
+     font pango:DejaVu Sans Mono, FontAwesome 12
      status_command /usr/bin/bumblebee-status \
         -m title getcrypto playerctl cpu cpu2 memory datetime weather \
         -p cpu2.colored=1 cpu2.layout="cpu2.temp cpu2.coresload" cpu2.temp_pattern=temp1_input \
         cpu.format="{:.0f}%" \
         memory.format="{used}/{total} ({percent:.0f}%)" \
         getcrypto.getltc=0  \
-        playerctl.format="{{artist}} - {{title}}" \
+        playerctl.layout="playerctl.song" \
+        playerctl.format="{{ trunc(artist, 20) }} - {{ trunc(title, 20) }} {{ emoji(status) }}" \
+        playerctl.args="--player ncspot,%any --ignore-player=chromium,plasma-browser-integration" \
+        title.short=true \
+        weather.showcity=false \
         -t iceberg-powerline
      position top
  }
@@ -222,7 +226,8 @@ exec_always --no-startup-id dunst
 exec --no-startup-id $HOME/.config/i3/auto_wallpaper.sh
 exec --no-startup-id alacritty
 exec --no-startup-id google-chrome-stable
-exec --no-startup-id spotify
+# exec --no-startup-id spotify
+exec --no-startup-id alacritty --class ncspot,ncspot -e ncspot
 exec --no-startup-id steam
 exec --no-startup-id lutris
 exec_always --no-startup-id fix-mouse
@@ -281,15 +286,18 @@ for_window [instance="Nxplayer.bin"] floating enable
 for_window [class="fl64.exe"] floating_enable
 for_window [class="btop"] floating_enable
 for_window [class="btop"] move scratchpad; for_window [class="btop"] scratchpad show; move scratchpad
-for_window [class="Spotify"] floating_enable
-for_window [class="Spotify"] move scratchpad; for_window [class="Spotify"] scratchpad show; move scratchpad
+# for_window [class="Spotify"] floating_enable
+# for_window [class="Spotify"] move scratchpad; for_window [class="Spotify"] scratchpad show; move scratchpad
+for_window [class="ncspot"] floating_enable
+for_window [class="ncspot"] move scratchpad; for_window [class="ncspot"] scratchpad show; move scratchpad
 for_window [class="Gpu-screen-recorder-gtk"] floating_enable
 for_window [class="Gpu-screen-recorder-gtk"] move scratchpad; for_window [class="Gpu-screen-recorder-gtk"] scratchpad show; move scratchpad
 
 
 # Scratchpad keybinds
 bindsym $mod+t [class="btop"] scratchpad show; move position center
-bindsym $mod+m [class="Spotify"] scratchpad show; move position center
+# bindsym $mod+m [class="Spotify"] scratchpad show; move position center
+bindsym $mod+m [class="ncspot"] scratchpad show; move position center
 bindsym $mod+v [class="Gpu-screen-recorder-gtk"] scratchpad show; move position center
 
 # FKeys
