@@ -78,10 +78,10 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+z split h
+# bindsym $mod+z split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+# bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -225,13 +225,14 @@ exec --no-startup-id google-chrome-stable
 exec --no-startup-id spotify
 exec --no-startup-id steam
 exec --no-startup-id lutris
-exec --no-startup-id heroic
-exec --no-startup-id flatpak run com.discordapp.Discord
 exec_always --no-startup-id fix-mouse
 exec --no-startup-id fix-mouse
 exec --no-startup-id alacritty --class btop,btop -e btop
-exec --no-startup-id $HOME/.config/i3/calendar.sh
 exec --no-startup-id solaar
+exec --no-startup-id discord-screenaudio
+# exec --no-startup-id flatpak run com.discordapp.Discord
+exec --no-startup-id gpu-screen-recorder-gtk
+
 
 # Assign program to window
 assign [class="Alacritty"] 1
@@ -277,15 +278,19 @@ for_window [instance="steam_proton"] floating enable
 for_window [instance="steam_app_1182480"] floating enable
 for_window [instance="steam_app_1238810"] floating enable
 for_window [instance="Nxplayer.bin"] floating enable
+for_window [class="fl64.exe"] floating_enable
 for_window [class="btop"] floating_enable
 for_window [class="btop"] move scratchpad; for_window [class="btop"] scratchpad show; move scratchpad
 for_window [class="Spotify"] floating_enable
 for_window [class="Spotify"] move scratchpad; for_window [class="Spotify"] scratchpad show; move scratchpad
+for_window [class="Gpu-screen-recorder-gtk"] floating_enable
+for_window [class="Gpu-screen-recorder-gtk"] move scratchpad; for_window [class="Gpu-screen-recorder-gtk"] scratchpad show; move scratchpad
 
 
 # Scratchpad keybinds
 bindsym $mod+t [class="btop"] scratchpad show; move position center
 bindsym $mod+m [class="Spotify"] scratchpad show; move position center
+bindsym $mod+v [class="Gpu-screen-recorder-gtk"] scratchpad show; move position center
 
 # FKeys
 # Pulse Audio controls
