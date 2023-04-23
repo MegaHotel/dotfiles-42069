@@ -63,9 +63,8 @@ https://github.com/koalaman/shellcheck#installing
 ## Dunst (notifications)
 https://github.com/dunst-project/dunst
 
-## gcalcli (Google Calendar CLI)
-https://github.com/insanum/gcalcli
-Make sure to go through setup + login
+## Ncspot (Spotify Client)
+https://github.com/hrkfdn/ncspot
 
 ## Fonts
 Hack + Fira Code
