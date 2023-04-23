@@ -201,20 +201,20 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
  bar {
-     font pango:DejaVu Sans Mono, FontAwesome 12
-     status_command /usr/bin/bumblebee-status \
-        -m title getcrypto playerctl cpu cpu2 memory datetime weather \
-        -p cpu2.colored=1 cpu2.layout="cpu2.temp cpu2.coresload" cpu2.temp_pattern=temp1_input \
-        cpu.format="{:.0f}%" \
-        memory.format="{used}/{total} ({percent:.0f}%)" \
-        getcrypto.getltc=0  \
-        playerctl.layout="playerctl.song" \
-        playerctl.format="{{ trunc(artist, 20) }} - {{ trunc(title, 20) }} {{ emoji(status) }}" \
-        playerctl.args="--player=ncspot,%any --ignore-player=chromium,plasma-browser-integration" \
-        title.short=true \
-        weather.showcity=false \
-        -t iceberg-powerline
-     position top
+    font pango:DejaVu Sans Mono, FontAwesome 12
+    status_command /usr/bin/bumblebee-status \
+      -m title getcrypto playerctl cpu cpu2 memory datetime weather \
+      -p cpu2.colored=1 cpu2.layout="cpu2.temp cpu2.coresload" cpu2.temp_pattern=temp1_input \
+      cpu.format="{:.0f}%" \
+      memory.format="{used}/{total} ({percent:.0f}%)" \
+      getcrypto.getltc=0  \
+      playerctl.layout="playerctl.song" \
+      playerctl.format="{{ trunc(artist, 20) }} - {{ trunc(title, 20) }} {{ emoji(status) }}" \
+      playerctl.args="--player=ncspot,%any --ignore-player=chromium,plasma-browser-integration" \
+      title.short=true \
+      weather.showcity=false \
+      -t iceberg-powerline
+    position top
  }
 # ------------------------------------------
 # CUSTOM KEYS START
@@ -256,6 +256,8 @@ assign [class="Albion Online Launcher"] 3
 assign [class="TotalWarhammer3"] 3
 assign [class="RimWorldLinux"] 3
 assign [class="battle.net.exe"] 3
+assign [class="Beyond-All-Reason"] 3
+assign [class="spring"] 3
 assign [class="Steam"] 4
 assign [class="Lutris"] 5
 assign [class="heroic"] 5

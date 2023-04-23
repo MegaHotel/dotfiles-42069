@@ -60,11 +60,17 @@ https://github.com/alefpereira/pyenv-pyright
 ## Shellcheck
 https://github.com/koalaman/shellcheck#installing
 
-## Dunst (notifications)
+## Dunst 
+Notifications daemon
 https://github.com/dunst-project/dunst
 
-## Ncspot (Spotify Client)
+## Ncspot
+Spotify Client
 https://github.com/hrkfdn/ncspot
+
+## Direnv
+Load env vars to shell from env file
+https://direnv.net/
 
 ## Fonts
 Hack + Fira Code
