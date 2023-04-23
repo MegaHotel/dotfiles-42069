@@ -68,10 +68,6 @@ https://github.com/dunst-project/dunst
 Spotify Client
 https://github.com/hrkfdn/ncspot
 
-## Direnv
-Load env vars to shell from env file
-https://direnv.net/
-
 ## Fonts
 Hack + Fira Code
 
