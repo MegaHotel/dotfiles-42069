@@ -175,6 +175,7 @@ lvim.builtin.telescope.defaults.mappings = {
 
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 lvim.builtin.which_key.mappings["q"] = { "<cmd>call QuickFixToggle()<CR>", "Toggle Quick Fix List" }
+lvim.builtin.which_key.mappings["t"] = { "<cmd>TroubleToggle<CR>", "Toggle Trouble" }
 lvim.builtin.which_key.mappings["r"] = {
   name = "Rust",
   r = { ":RustRun<CR>", "Run" },
@@ -189,6 +190,55 @@ lvim.builtin.which_key.mappings["m"] = {
     d = { ":TodoTelescope<CR>", "Telescope List" },
   },
   p = { ":Glow<CR>", "Preview Markdown" },
+}
+local chatgpt = require("chatgpt")
+lvim.builtin.which_key.vmappings["a"] = {
+  name = "ChatGPT",
+  e = {
+    function()
+      chatgpt.edit_with_instructions()
+    end,
+    "Edit with instructions",
+  },
+  a = {
+    ":ChatGPTRun code_readability_analysis<CR>",
+    "Readability Analysis"
+  },
+  k = {
+    ":ChatGPTRun explain_code<CR>",
+    "Explain code"
+  },
+  o = {
+    ":ChatGPTRun optimize_code<CR>",
+    "Optimize code"
+  },
+  t = {
+    ":ChatGPTRun add_tests<CR>",
+    "Add Tests"
+  },
+}
+lvim.builtin.which_key.mappings["a"] = {
+  name = "ChatGPT",
+  i = {
+    ":ChatGPT<CR>",
+    "ChatGPT"
+  },
+  d = {
+    ":ChatGPTActAs<CR>",
+    "ChatGPT act as"
+  },
+  k = {
+    ":ChatGPTRun explain_code<CR>",
+    "Explain code"
+  },
+  o = {
+    ":ChatGPTRun optimize_code<CR>",
+    "Optimize code"
+  },
+  t = {
+    ":ChatGPTRun add_tests<CR>",
+    "Add Tests"
+  },
 }
 
 
@@ -496,7 +546,46 @@ lvim.plugins = {
   {
     "rcarriga/nvim-notify",
   },
+  {
+    "itchyny/vim-cursorword",
+    event = { "BufEnter", "BufNewFile" },
+    config = function()
+      vim.api.nvim_command("augroup user_plugin_cursorword")
+      vim.api.nvim_command("autocmd!")
+      vim.api.nvim_command("autocmd FileType NvimTree,lspsagafinder,dashboard,vista let b:cursorword = 0")
+      vim.api.nvim_command("autocmd WinEnter * if &diff || &pvw | let b:cursorword = 0 | endif")
+      vim.api.nvim_command("autocmd InsertEnter * let b:cursorword = 0")
+      vim.api.nvim_command("autocmd InsertLeave * let b:cursorword = 1")
+      vim.api.nvim_command("augroup END")
+    end
+  },
+  {
+    "folke/trouble.nvim",
+    requires = "nvim-tree/nvim-web-devicons",
+    config = function()
+      require("trouble").setup {}
+    end
+  },
+  {
+    "ggandor/leap.nvim",
+    as = "leap",
+  },
+  {
+    "jackMort/ChatGPT.nvim",
+    config = function()
+      require("chatgpt").setup()
+    end,
+    requires = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim"
+    }
+  }
 }
+
+-- Leap
+MapKey("n", "f", "<Plug>(leap-forward-to)", { silent = true })
+MapKey("n", "F", "<Plug>(leap-backward-to)", { silent = true })
 
 -- Enable treesitter-rainbow
 lvim.builtin.treesitter.rainbow.enable = true
