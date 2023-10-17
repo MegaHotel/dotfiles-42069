@@ -6,6 +6,8 @@ set -gx STARSHIP_CONFIG  "$HOME/.config/starship/starship.toml"
 set -Ux PYENV_ROOT $HOME/.pyenv
 set -U fish_user_paths $PYENV_ROOT/bin $fish_user_paths
 read -gx OPENAI_API_KEY < $HOME/.openai_api_key
+set -Ux LIBTORCH "$HOME/libtorch/gpu"
+set -Ux LD_LIBRARY_PATH "$LIBTORCH/lib"
 
 
 alias ll='exa --long -a --icons'

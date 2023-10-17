@@ -10,3 +10,10 @@ hide_display_names = true
 "}" =  "move down 5"
 "$" = "move up 100"
 "^" = "move down 100"
+
+[track_format]
+left = "%artists - %title"
+center = "%album"
+right = "%saved %duration"
+
+

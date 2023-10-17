@@ -16,6 +16,48 @@ lvim.format_on_save = true
 lvim.colorscheme = "gruvbox-baby"
 vim.opt.relativenumber = true
 vim.opt.timeoutlen = 150
+
+
+-- Status line config
+local components = require("lvim.core.lualine.components")
+local function deepcopy(orig, copies)
+  copies = copies or {}
+  local orig_type = type(orig)
+  local copy
+  if orig_type == 'table' then
+    if copies[orig] then
+      copy = copies[orig]
+    else
+      copy = {}
+      copies[orig] = copy
+      for orig_key, orig_value in next, orig, nil do
+        copy[deepcopy(orig_key, copies)] = deepcopy(orig_value, copies)
+      end
+      setmetatable(copy, deepcopy(getmetatable(orig), copies))
+    end
+  else -- number, string, boolean, etc
+    copy = orig
+  end
+  return copy
+end
+
+local filepath = deepcopy(components.progress);
+filepath.fmt = function()
+  return "%F"
+end
+
+local progress = components.progress;
+progress.fmt = function()
+  return "%l:%c/%L"
+end
+
+progress.color = { gui = "bold" }
+lvim.builtin.lualine.sections.lualine_a = { components.branch, progress }
+lvim.builtin.lualine.sections.lualine_b = { components.diff, filepath }
+lvim.builtin.lualine.sections.lualine_c = {}
+lvim.builtin.lualine.sections.lualine_y = {}
+lvim.builtin.lualine.sections.lualine_z = {}
+
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -28,7 +70,7 @@ lvim.leader = "space"
 -- override or add a default keymapping
 lvim.keys.normal_mode = {
   -- quit editor
-  ["<C-q>"] = ":lua require('lvim.utils.functions').smart_quit()<CR>",
+  ["<C-q>"] = ":q<cr>",
 
   -- save buffer
   ["<C-s>"] = ":w<cr>",
@@ -130,15 +172,18 @@ MapKey("n", "<C-d>", "15j")
 MapKey("n", "<C-u>", "15k")
 
 -- Nvimtree config
+if lvim.builtin.nvimtree.setup.view.mappings == nil then
+  lvim.builtin.nvimtree.setup.view.mappings = {}
+end
 lvim.builtin.nvimtree.setup.view.mappings.list = {
-  { key = { "l", "<CR>", "o" }, action = "edit", mode = "n" },
-  { key = "h", action = "close_node" },
-  { key = "v", action = "vsplit" },
-  { key = "C", action = "cd" },
-  { ley = "<C-e>", action = "" },
+  { key = { "l", "<CR>", "o" }, action = "edit",      mode = "n" },
+  { key = "h",                  action = "close_node" },
+  { key = "v",                  action = "vsplit" },
+  { key = "C",                  action = "cd" },
+  { ley = "<C-e>",              action = "" },
 }
-lvim.builtin.nvimtree.setup.open_on_setup = true
-lvim.builtin.nvimtree.setup.open_on_setup_file = true
+-- lvim.builtin.nvimtree.setup.open_on_setup = true
+-- lvim.builtin.nvimtree.setup.open_on_setup_file = true
 lvim.builtin.nvimtree.setup.open_on_tab = true
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
@@ -191,55 +236,6 @@ lvim.builtin.which_key.mappings["m"] = {
   },
   p = { ":Glow<CR>", "Preview Markdown" },
 }
-local chatgpt = require("chatgpt")
-lvim.builtin.which_key.vmappings["a"] = {
-  name = "ChatGPT",
-  e = {
-    function()
-      chatgpt.edit_with_instructions()
-    end,
-    "Edit with instructions",
-  },
-  a = {
-    ":ChatGPTRun code_readability_analysis<CR>",
-    "Readability Analysis"
-  },
-  k = {
-    ":ChatGPTRun explain_code<CR>",
-    "Explain code"
-  },
-  o = {
-    ":ChatGPTRun optimize_code<CR>",
-    "Optimize code"
-  },
-  t = {
-    ":ChatGPTRun add_tests<CR>",
-    "Add Tests"
-  },
-}
-lvim.builtin.which_key.mappings["a"] = {
-  name = "ChatGPT",
-  i = {
-    ":ChatGPT<CR>",
-    "ChatGPT"
-  },
-  d = {
-    ":ChatGPTActAs<CR>",
-    "ChatGPT act as"
-  },
-  k = {
-    ":ChatGPTRun explain_code<CR>",
-    "Explain code"
-  },
-  o = {
-    ":ChatGPTRun optimize_code<CR>",
-    "Optimize code"
-  },
-  t = {
-    ":ChatGPTRun add_tests<CR>",
-    "Add Tests"
-  },
-}
 
 
 -- TODO: User Config for predefined plugins
@@ -261,7 +257,6 @@ lvim.builtin.treesitter.ensure_installed = {
   "tsx",
   "css",
   "rust",
-  "java",
   "yaml",
 }
 
@@ -335,6 +330,7 @@ local extension_path = '/home/megahotel/codelldb/extension'
 local codelldb_path = extension_path .. 'adapter/codelldb'
 local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
 
+lvim.builtin.nvimtree.setup["git"]["timeout"] = 60000
 
 -- Additional Plugins
 lvim.plugins = {
@@ -427,7 +423,7 @@ lvim.plugins = {
   {
     "lukas-reineke/indent-blankline.nvim",
     event = "BufRead",
-    setup = function()
+    init = function()
       vim.g.indent_blankline_char = "▏"
       vim.opt.list = true
     end,
@@ -520,30 +516,6 @@ lvim.plugins = {
     end,
   },
   {
-    "romgrk/nvim-treesitter-context",
-    config = function()
-      require("treesitter-context").setup {
-        enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-        throttle = true, -- Throttles plugin updates (may improve performance)
-        max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
-        patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
-          -- For all filetypes
-          -- Note that setting an entry here replaces all other patterns for this entry.
-          -- By setting the 'default' entry below, you can control which nodes you want to
-          -- appear in the context window.
-          default = {
-            'class',
-            'function',
-            'method',
-          },
-        },
-      }
-    end
-  },
-  {
-    "p00f/nvim-ts-rainbow",
-  },
-  {
     "rcarriga/nvim-notify",
   },
   {
@@ -561,25 +533,38 @@ lvim.plugins = {
   },
   {
     "folke/trouble.nvim",
-    requires = "nvim-tree/nvim-web-devicons",
+    dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
       require("trouble").setup {}
     end
   },
   {
     "ggandor/leap.nvim",
-    as = "leap",
+    name = "leap",
   },
   {
-    "jackMort/ChatGPT.nvim",
+    "hiphish/rainbow-delimiters.nvim",
     config = function()
-      require("chatgpt").setup()
-    end,
-    requires = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim"
-    }
+      local rainbow_delimiters = require 'rainbow-delimiters'
+
+      vim.g.rainbow_delimiters = {
+        strategy = {
+          [''] = rainbow_delimiters.strategy['global'],
+          vim = rainbow_delimiters.strategy['local'],
+        },
+        query = {
+          [''] = 'rainbow-delimiters',
+          lua = 'rainbow-blocks',
+        },
+        highlight = {
+          'RainbowDelimiterBlue',
+          'RainbowDelimiterYellow',
+          'RainbowDelimiterOrange',
+          'RainbowDelimiterGreen',
+          'RainbowDelimiterViolet',
+        },
+      }
+    end
   }
 }
 

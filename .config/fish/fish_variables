@@ -1,5 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export --path LD_LIBRARY_PATH:/home/megahotel/libtorch/gpu/lib
+SETUVAR --export LIBTORCH:/home/megahotel/libtorch/gpu
 SETUVAR --export PYENV_ROOT:/home/megahotel/\x2epyenv
 SETUVAR __fish_initialized:3400
 SETUVAR fish_color_autosuggestion:555\x1ebrblack

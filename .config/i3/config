@@ -63,6 +63,9 @@ bindsym $mod+l focus right
 bindsym $mod+Down exec "playerctl --player=ncspot,%any previous"
 bindsym $mod+Up exec "playerctl --player=ncspot,%any next"
 bindsym $mod+p exec "playerctl --player=ncspot,%any play-pause"
+bindsym $mod+o exec "playerctl --player=chromium,%any play-pause"
+bindsym $mod+bracketleft exec "playerctl --player=ncspot,%any volume 0.05-"
+bindsym $mod+bracketright exec "playerctl --player=ncspot,%any volume 0.05+"
 
 # alternatively, you can use the cursor keys:
 # bindsym $mod+Left focus left
@@ -239,9 +242,10 @@ exec_always --no-startup-id fix-mouse
 exec --no-startup-id fix-mouse
 exec --no-startup-id alacritty --class btop,btop -e btop
 exec --no-startup-id solaar
-exec --no-startup-id discord-screenaudio
-# exec --no-startup-id flatpak run com.discordapp.Discord
+# exec --no-startup-id discord-screenaudio
+exec --no-startup-id flatpak run com.discordapp.Discord
 exec --no-startup-id gpu-screen-recorder-gtk
+# exec --no-startup-id brave
 
 
 # Assign program to window
@@ -259,6 +263,7 @@ assign [class="battle.net.exe"] 3
 assign [class="Beyond-All-Reason"] 3
 assign [class="spring"] 3
 assign [class="Steam"] 4
+assign [class="steam"] 4
 assign [class="Lutris"] 5
 assign [class="heroic"] 5
 assign [class="qBitorrent"] 6
@@ -299,6 +304,7 @@ for_window [class="ncspot"] floating_enable
 for_window [class="ncspot"] move scratchpad; for_window [class="ncspot"] scratchpad show; move scratchpad
 for_window [class="Gpu-screen-recorder-gtk"] floating_enable
 for_window [class="Gpu-screen-recorder-gtk"] move scratchpad; for_window [class="Gpu-screen-recorder-gtk"] scratchpad show; move scratchpad
+for_window [class="awakened-poe-trade"] floating enable
 
 
 # Scratchpad keybinds
