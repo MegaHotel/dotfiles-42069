@@ -33,6 +33,9 @@ service_map: dict[str, FilesPaths] = {
     "ncspot": {
         "folder_path": "ncspot",
     },
+    "neofetch": {
+        "folder_path": "neofetch",
+    },
 }
 
 all_services: list[str] = [service_name for service_name in service_map.keys()]
