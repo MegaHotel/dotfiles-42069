@@ -68,6 +68,14 @@ https://github.com/dunst-project/dunst
 Spotify Client
 https://github.com/hrkfdn/ncspot
 
+## yq
+Command-line YAML, JSON and XML processor
+https://github.com/mikefarah/yq
+
+## tldr
+Like `man`, but better
+https://github.com/tldr-pages/tldr
+
 ## Fonts
 Hack + Fira Code
 

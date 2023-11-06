@@ -236,6 +236,39 @@ lvim.builtin.which_key.mappings["m"] = {
   },
   p = { ":Glow<CR>", "Preview Markdown" },
 }
+lvim.builtin.which_key.mappings["o"] = {
+  name = "Obsidian",
+  o = { ":ObsidianOpen<CR>", "Open Obsidian application" },
+  n = { ":ObsidianNew<CR>", "New Note" },
+  s = {
+    name = "Search",
+    f = { ":ObsidianQuickSwitch<CR>", "Search by note name" },
+    t = { ":ObsidianSearch<CR>", "Search by note content" },
+  },
+  g = {
+    name = "Go to",
+    d = { ":ObsidianFollowLink<CR>", "Follow link" },
+    r = { ":ObsidianBacklinks<CR>", "Get references" },
+  },
+  d = {
+    name = "Daily",
+    n = { ":ObsidianToday<CR>", "New daily note" },
+    y = { ":ObsidianYesterday<CR>", "New yesterday's daily note" },
+  },
+  t = { ":ObsidianTemplate<CR>", "Insert template" },
+  p = { ":ObsidianWorkspace<CR>", "Switch to another workplace" },
+}
+lvim.builtin.which_key.vmappings["o"] = {
+  name = "Obsidian",
+  l = {
+    name = "Link",
+    e = { ":ObsidianLink<CR>", "Link by note name" },
+    n = { ":ObsidianLinkNew<CR>", "Link new" },
+  },
+}
+
+
+MapKey("n", "U", "<CMD>RustCodeAction<CR>", { silent = true, desc = "Code action" })
 
 
 -- TODO: User Config for predefined plugins
@@ -546,7 +579,6 @@ lvim.plugins = {
     "hiphish/rainbow-delimiters.nvim",
     config = function()
       local rainbow_delimiters = require 'rainbow-delimiters'
-
       vim.g.rainbow_delimiters = {
         strategy = {
           [''] = rainbow_delimiters.strategy['global'],
@@ -565,6 +597,27 @@ lvim.plugins = {
         },
       }
     end
+  },
+  {
+    "epwalsh/obsidian.nvim",
+    lazy = true,
+    event = {
+      -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+      -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
+      "BufReadPre " .. vim.fn.expand "~" .. "/obsidian/**.md",
+      "BufNewFile " .. vim.fn.expand "~" .. "/obsidian/**.md"
+    },
+    config = function()
+      require("obsidian").setup {
+        note_id_func = function()
+          return "new_note.md"
+        end,
+        disable_frontmatter = true
+      }
+    end,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
   }
 }
 
@@ -595,6 +648,15 @@ require('nvim-lastplace').setup {
   lastplace_ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
   lastplace_open_folds = true
 }
+
+-- For obsidian.nvim
+require("nvim-treesitter.configs").setup({
+  ensure_installed = { "markdown", "markdown_inline", ... },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = { "markdown" },
+  },
+})
 
 
 -- Guifont
