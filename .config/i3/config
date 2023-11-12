@@ -67,6 +67,10 @@ bindsym $mod+o exec "playerctl --player=chromium,%any play-pause"
 bindsym $mod+bracketleft exec "playerctl --player=ncspot,%any volume 0.05-"
 bindsym $mod+bracketright exec "playerctl --player=ncspot,%any volume 0.05+"
 
+# Toggle speakers
+bindsym $mod+s exec "pactl set-sink-mute $(pactl list sinks short | grep 'Generic_USB2' | grep -oP '^\S+') toggle"
+
+
 # alternatively, you can use the cursor keys:
 # bindsym $mod+Left focus left
 # bindsym $mod+Down focus down
@@ -95,8 +99,8 @@ bindsym $mod+Shift+l move right
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+# bindsym $mod+s layout stacking
+# bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating

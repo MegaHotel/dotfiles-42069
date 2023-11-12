@@ -263,7 +263,8 @@ lvim.builtin.which_key.vmappings["o"] = {
   l = {
     name = "Link",
     e = { ":ObsidianLink<CR>", "Link by note name" },
-    n = { ":ObsidianLinkNew<CR>", "Link new" },
+    r = { ":ObsidianLink ", "Link with note name" },
+    n = { ":ObsidianLinkNew<CR>", "Link with new note" },
   },
 }
 
@@ -618,6 +619,23 @@ lvim.plugins = {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+  },
+  'cameron-wags/rainbow_csv.nvim',
+  config = function()
+    require 'rainbow_csv'.setup()
+  end,
+  module = {
+    'rainbow_csv',
+    'rainbow_csv.fns'
+  },
+  ft = {
+    'csv',
+    'tsv',
+    'csv_semicolon',
+    'csv_whitespace',
+    'csv_pipe',
+    'rfc_csv',
+    'rfc_semicolon'
   }
 }
 
