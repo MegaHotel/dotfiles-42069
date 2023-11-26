@@ -250,6 +250,8 @@ exec --no-startup-id solaar
 exec --no-startup-id flatpak run com.discordapp.Discord
 exec --no-startup-id gpu-screen-recorder-gtk
 # exec --no-startup-id brave
+exec --no-startup-id dex .config/autostart/geoclue-demo-agent.desktop
+exec --no-startup-id redshift
 
 
 # Assign program to window

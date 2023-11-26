@@ -60,7 +60,7 @@ https://github.com/alefpereira/pyenv-pyright
 ## Shellcheck
 https://github.com/koalaman/shellcheck#installing
 
-## Dunst 
+## Dunst
 Notifications daemon
 https://github.com/dunst-project/dunst
 
@@ -75,6 +75,14 @@ https://github.com/mikefarah/yq
 ## tldr
 Like `man`, but better
 https://github.com/tldr-pages/tldr
+
+## Dex
+Generate and execute DesktopEntry files of the Application type
+https://github.com/jceb/dex
+
+## Redshift
+Adjust the color temperature screen according to surroundings
+https://github.com/jonls/redshift
 
 ## Fonts
 Hack + Fira Code

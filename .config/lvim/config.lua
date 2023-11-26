@@ -358,7 +358,19 @@ linters.setup {
 }
 
 
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "rust_analyzer" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "rust_analyzer", "terraformls" })
+
+-- Terraform configuration
+require 'lspconfig'.terraformls.setup {}
+require 'lspconfig'.tflint.setup {}
+
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*.tf", "*.tfvars" },
+  callback = function()
+    vim.lsp.buf.format()
+  end,
+})
+
 
 local extension_path = '/home/megahotel/codelldb/extension'
 local codelldb_path = extension_path .. 'adapter/codelldb'
