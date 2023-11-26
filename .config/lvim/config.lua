@@ -267,6 +267,7 @@ lvim.builtin.which_key.vmappings["o"] = {
     n = { ":ObsidianLinkNew<CR>", "Link with new note" },
   },
 }
+lvim.builtin.which_key.mappings["g"]["l"] = { ":GitBlameToggle<CR>", "Blame" }
 
 
 MapKey("n", "U", "<CMD>RustCodeAction<CR>", { silent = true, desc = "Code action" })
@@ -632,23 +633,30 @@ lvim.plugins = {
       "nvim-lua/plenary.nvim",
     },
   },
-  'cameron-wags/rainbow_csv.nvim',
-  config = function()
-    require 'rainbow_csv'.setup()
-  end,
-  module = {
-    'rainbow_csv',
-    'rainbow_csv.fns'
+  {
+    'cameron-wags/rainbow_csv.nvim',
+    config = function()
+      require 'rainbow_csv'.setup()
+    end,
+    lazy = true,
+    ft = {
+      'csv',
+      'tsv',
+      'csv_semicolon',
+      'csv_whitespace',
+      'csv_pipe',
+      'rfc_csv',
+      'rfc_semicolon'
+    }
   },
-  ft = {
-    'csv',
-    'tsv',
-    'csv_semicolon',
-    'csv_whitespace',
-    'csv_pipe',
-    'rfc_csv',
-    'rfc_semicolon'
-  }
+  {
+    "f-person/git-blame.nvim",
+    event = "BufRead",
+    config = function()
+      vim.cmd "highlight default link gitblame SpecialComment"
+      require("gitblame").setup { enabled = false }
+    end,
+  },
 }
 
 -- Leap
