@@ -81,6 +81,7 @@ Generate and execute DesktopEntry files of the Application type
 https://github.com/jceb/dex
 
 ## Redshift
+Prefer `redshift-git` over `redshift` or `redshift-gtk`
 Adjust the color temperature screen according to surroundings
 https://github.com/jonls/redshift
 
