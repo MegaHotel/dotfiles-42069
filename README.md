@@ -54,7 +54,7 @@ Make sure to add the init stuff to shell config and only then install the virtua
 Then install virtualenv plugin
 https://github.com/pyenv/pyenv-virtualenv
 
-Then intsall Pyright plugin (Python Neovim LSP server)
+Then install Pyright plugin (Python Neovim LSP server)
 https://github.com/alefpereira/pyenv-pyright
 
 ## Shellcheck
@@ -87,6 +87,22 @@ https://github.com/jonls/redshift
 
 ## Fonts
 Hack + Fira Code
+
+## Glow
+Preview markdown in neovim
+https://github.com/charmbracelet/glow
+
+## Just
+Command runner, like `make` but better
+https://github.com/casey/just
+
+Create this global gitignore file to ignore all justfile across all git repos
+```
+Justfile
+justfile
+```
+Use this to use this gitignore file globally
+```git config --global core.excludesFile '~/.config/.gitignore_global'```
 
 ---
 
