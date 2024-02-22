@@ -104,6 +104,18 @@ justfile
 Use this to use this gitignore file globally
 ```git config --global core.excludesFile '~/.config/.gitignore_global'```
 
+## Fisher
+Plugin manager for fish shell
+https://github.com/jorgebucaran/fisher
+
+## nvm.fish
+nvm (node version manager) for fish shell
+https://github.com/jorgebucaran/nvm.fish
+
+## Zoxide
+Smart `cd` command
+https://github.com/ajeetdsouza/zoxide
+
 ---
 
 DO NOT FORGET TO BACKUP YOUR FILES!!!
