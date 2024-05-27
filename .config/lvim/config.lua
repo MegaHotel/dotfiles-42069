@@ -12,7 +12,7 @@ an executable
 
 -- general
 lvim.log.level = "warn"
-lvim.format_on_save = true
+lvim.format_on_save.enabled = true
 lvim.colorscheme = "gruvbox-baby"
 vim.opt.relativenumber = true
 vim.opt.timeoutlen = 150
@@ -97,10 +97,6 @@ lvim.keys.normal_mode = {
   ["<p>"] = '"*p',
 }
 
--- unmap default leader key maps
-lvim.builtin.which_key.mappings["e"] = {}
-lvim.builtin.which_key.mappings["c"] = {}
-lvim.builtin.which_key.mappings["/"] = {}
 
 -- dap
 lvim.builtin.dap.active = true
@@ -142,7 +138,7 @@ local node_attach = {
 dap.configurations.typescript = { node, node_attach }
 dap.configurations.javascript = { node, node_attach }
 
--- open dapui automatically when runnign debug
+-- open dapui automatically when running debug
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
 end
@@ -154,7 +150,7 @@ dap.listeners.before.event_exited["dapui_config"] = function()
 end
 
 
-function MapKey(mode, lhs, rhs, opts)
+local function MapKey(mode, lhs, rhs, opts)
   local options = { noremap = true }
   if opts then options = vim.tbl_extend('force', options, opts) end
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
@@ -204,23 +200,11 @@ lvim.builtin.telescope.defaults.mappings = {
   },
 }
 
--- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
--- lvim.builtin.which_key.mappings["t"] = {
---   name = "+Trouble",
---   r = { "<cmd>Trouble lsp_references<cr>", "References" },
---   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
---   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
---   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
---   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
--- }
-
-
-
+-- Leader key mappings
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 lvim.builtin.which_key.mappings["q"] = { "<cmd>call QuickFixToggle()<CR>", "Toggle Quick Fix List" }
-lvim.builtin.which_key.mappings["t"] = { "<cmd>TroubleToggle<CR>", "Toggle Trouble" }
+lvim.builtin.which_key.mappings["t"] = { "<cmd>TroubleToggle document_diagnostics<CR>", "Toggle Trouble for buffer" }
+lvim.builtin.which_key.mappings["T"] = { "<cmd>TroubleToggle workspace_diagnostics<CR>", "Toggle Trouble for workspace" }
 lvim.builtin.which_key.mappings["r"] = {
   name = "Rust",
   r = { ":RustRun<CR>", "Run" },
@@ -269,6 +253,11 @@ lvim.builtin.which_key.vmappings["o"] = {
 }
 lvim.builtin.which_key.mappings["g"]["l"] = { ":GitBlameToggle<CR>", "Blame" }
 
+-- unmap default leader key maps
+lvim.builtin.which_key.mappings["e"] = {}
+lvim.builtin.which_key.mappings["c"] = {}
+lvim.builtin.which_key.mappings["/"] = {}
+lvim.builtin.which_key.mappings["w"] = {}
 
 MapKey("n", "U", "<CMD>RustCodeAction<CR>", { silent = true, desc = "Code action" })
 
@@ -293,6 +282,7 @@ lvim.builtin.treesitter.ensure_installed = {
   "css",
   "rust",
   "yaml",
+  "go",
 }
 
 lvim.builtin.treesitter.ignore_install = { "haskell" }
@@ -328,7 +318,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
-  { command = "black", filetypes = { "python" } },
+  { command = "black" },
   {
     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
     command = "prettier",
@@ -343,7 +333,9 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  { command = "flake8", filetypes = { "python" } },
+  { command = "flake8" },
+  -- { command = "golangci_lint", args = { "run", vim.loop.cwd() } },
+  -- { command = "golangci_lint", args = { "run", "./asdf" } },
   {
     --     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
     command = "shellcheck",
@@ -353,10 +345,74 @@ linters.setup {
   },
   {
     command = "codespell",
-    --     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
-    filetypes = { "javascript", "python" },
   },
+  { command = "luacheck" }
 }
+
+
+-- -- Golangci setup
+local lspconfig = require 'lspconfig'
+local configs = require 'lspconfig/configs'
+lspconfig.lua_ls.setup {
+  on_init = function(client)
+    local path = client.workspace_folders[1].name
+    if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+      client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+        Lua = {
+          format = {
+            -- enable = false,
+            -- defaultConfig = {
+            --   align_continuous_assign_statement = false,
+            --   align_function_params = false,
+            --   align_if_branch = false,
+            --   align_array_table = false,
+            --   indent_size = 4,
+            -- }
+          },
+          runtime = {
+            -- Tell the language server which version of Lua you're using
+            -- (most likely LuaJIT in the case of Neovim)
+            version = 'LuaJIT'
+          },
+          -- Make the server aware of Neovim runtime files
+          workspace = {
+            checkThirdParty = false,
+            library = {
+              vim.env.VIMRUNTIME
+              -- "${3rd}/luv/library"
+              -- "${3rd}/busted/library",
+            }
+            -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+            -- library = vim.api.nvim_get_runtime_file("", true)
+          }
+        }
+      })
+
+      client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+    end
+    return true
+  end
+}
+
+if not configs.golangcilsp then
+  configs.golangcilsp = {
+    default_config = {
+      cmd = { 'golangci-lint-langserver' },
+      root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+      init_options = {
+        command = { "golangci-lint", "run", "--out-format", "json",
+          "--issues-exit-code=1" },
+      }
+    },
+  }
+end
+
+lspconfig.golangci_lint_ls.setup {
+  filetypes = { 'go', 'gomod' }
+}
+
+-- Markdwon setup
+-- require 'lspconfig'.marksman.setup {}
 
 
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "rust_analyzer", "terraformls" })
@@ -534,9 +590,6 @@ lvim.plugins = {
     end,
   },
   {
-    "ellisonleao/glow.nvim"
-  },
-  {
     "kevinhwang91/nvim-bqf",
     event = { "BufRead", "BufNew" },
     config = function()
@@ -657,6 +710,21 @@ lvim.plugins = {
       require("gitblame").setup { enabled = false }
     end,
   },
+  {
+    "ellisonleao/glow.nvim",
+    config = function()
+      require("glow").setup({
+        width = 2000,
+        height = 2000,
+        width_ratio = 1.0,
+        height_ratio = 1.0,
+      })
+    end
+  },
+  {
+    "NoahTheDuke/vim-just",
+    ft = { "just" },
+  },
 }
 
 -- Leap
@@ -695,6 +763,16 @@ require("nvim-treesitter.configs").setup({
     additional_vim_regex_highlighting = { "markdown" },
   },
 })
+
+-- Just tree sitter
+require("nvim-treesitter.parsers").get_parser_configs().just = {
+  install_info = {
+    url = "https://github.com/IndianBoy42/tree-sitter-just", -- local path or git repo
+    files = { "src/parser.c", "src/scanner.c" },
+    branch = "main",
+  },
+  maintainers = { "@IndianBoy42" },
+}
 
 
 -- Guifont
@@ -825,9 +903,16 @@ endif
 
 
 -- Enable netrw for remote vim
-lvim.builtin.nvimtree.setup.disable_netrw = false
-lvim.builtin.nvimtree.setup.hijack_netrw = false
+-- lvim.builtin.nvimtree.setup.disable_netrw = false
+-- lvim.builtin.nvimtree.setup.hijack_netrw = false
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+lvim.builtin.nvimtree.setup.hijack_netrw = true
+lvim.builtin.project.active = false
+lvim.builtin.nvimtree.setup.update_focused_file.update_root = false
+lvim.builtin.nvimtree.setup.actions.change_dir.enable = false
+lvim.builtin.nvimtree.setup.update_cwd = false
 
 
 -- PATCH: in order to address the message:

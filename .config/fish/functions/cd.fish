@@ -1,5 +1,4 @@
-function cd --description "Add exa to the cd command"
+function cd --description "cd and exa"
   builtin cd $argv && \
   exa --long -a --icons;
 end
-

@@ -116,6 +116,9 @@ https://github.com/jorgebucaran/nvm.fish
 Smart `cd` command
 https://github.com/ajeetdsouza/zoxide
 
+## Warp
+Terminal with AI
+https://www.warp.dev/
 ---
 
 DO NOT FORGET TO BACKUP YOUR FILES!!!
